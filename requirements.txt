@@ -1,0 +1,19 @@
+# Core Framework & APIs (Requires Python 3.12+)
+Django==6.1.1
+djangorestframework==3.18.1
+djangorestframework-simplejwt==5.5.1
+
+# PostgresDatabase Adapter
+psycopg==3.3.6
+
+# Security & CORS
+django-cors-headers==4.6.0
+PyJWT==2.10.1
+
+# Environment Variables & Configuration
+python-dotenv==1.0.1
+
+# Internal Utilities & Support
+pytz==2024.2
+sqlparse==0.5.3
+asgiref==3.9.1

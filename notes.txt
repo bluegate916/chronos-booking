@@ -1,0 +1,82 @@
+C:\Users\USER T\chronos-booking>.\chronos_env\Scripts\activate  // activate env
+(chronos_env) C:\Users\USER T\chronos-booking>
+ 
+install using requirements ---  pip install -r requirements.txt
+INFO: pip is looking at multiple versions of django to determine which version is compatible with other requirements. This could take a while.
+ERROR: Cannot install -r requirements.txt (line 2) and asgiref==3.8.1 because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    The user requested asgiref==3.8.1
+    django 6.1.1 depends on asgiref>=3.9.1
+
+Collecting Pillow
+  Downloading pillow-12.3.0-cp314-cp314-win_amd64.whl.metadata (9.3 kB)
+Downloading pillow-12.3.0-cp314-cp314-win_amd64.whl (7.2 MB)
+   ---------------------------------------- 7.2/7.2 MB 40.5 kB/s  0:03:19
+Installing collected packages: Pillow
+Successfully installed Pillow-12.3.0
+
+Additionally, some packages in these conflicts have no matching distributions available for your environment:
+    asgiref
+
+📦 chronos-booking (Main Root Folder)
+ ┣ 📂 chronos_env (Your Virtual Environment)
+ ┗ 📂 chronos_backend (The Django Project Folder)
+   ┃
+   ┣ 📜 manage.py  <-- 🚨 ALWAYS RUN PYTHON COMMANDS FROM THIS EXACT FOLDER!
+   ┃
+   ┗ 📂 chronos_backend (The Inner Project Configuration Folder)
+     ┗ 📜 settings.py, urls.py, wsgi.py
+
+Why this fixes the issue Your requirements.txt installed psycopg, which defaults to looking 
+for the C-library (libpq) already installed on your machine.Since you are on Windows, that 
+library is usually missing unless you have PostgreSQL fully installed and mapped to your system path.
+Installing psycopg[binary] provides a pre-compiled version of the driver that includes its own dependencies so it can run immediately.
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip to attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
+OS routines for NT or Posix depending on what system we're on.
+
+python manage.py makemigrations
+python manage.py migrate
+
+CREATE TABLE table_name(
+    column1 datatype(length) column_constraint(like NOT_NULL, UNIQUE, NULL),
+    column1 datatype(length) column_constraint,
+    column1 datatype(length) column_constraint,
+    table_constraints(applied to more than one column)
+);
+
+git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+As a golden rule for your terminal: Any command that starts with python manage.py ... 
+must be run from the folder that contains manage.py.
+
+This exports:
+   all functions from posix or nt, e.g. unlink, stat, etc.
+   os.path is either posixpath or ntpath
+   os.name is either 'posix' or 'nt'
+   os.curdir is a string representing the current directory (always '.')
+   os.pardir is a string representing the parent directory (always '..')
+   os.sep is the (or a most common) pathname separator ('/' or '\')
+   os.extsep is the extension separator (always '.')
+   os.altsep is the alternate pathname separator (None or '/')
+   os.pathsep is the component separator used in $PATH etc
+   os.linesep is the line separator in text files ('\n' or '\r\n')
+   common) pathname separator ('/' or '\')
+   os.extsep is the extension separator (always '.')
+   os.altsep is the alternate pathname separator (None or '/')
+   os.pathsep is the component separator used in $PATH etc
+   os.linesep is the line separator in text files ('\n' or '\r\n')
+   os.defpath is the default search path for executables
+   os.devnull is the file path of the null device ('/dev/null', etc.)
+
+Programs that import and use 'os' stand a better chance of being
+portable between different platforms. Of course, they must then
+only use functions that are defined by all platforms (e.g., unlink
+and opendir), and leave all pathname manipulation to os.path
+(e.g., split and join).
