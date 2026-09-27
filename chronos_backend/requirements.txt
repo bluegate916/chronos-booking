@@ -5,6 +5,7 @@ djangorestframework-simplejwt==5.5.1
 
 # PostgresDatabase Adapter
 psycopg==3.3.6
+psycopg-binary-3.3.6
 
 # Security & CORS
 django-cors-headers==4.6.0
@@ -17,3 +18,6 @@ python-dotenv==1.0.1
 pytz==2024.2
 sqlparse==0.5.3
 asgiref==3.9.1
+
+# Image
+Pillow>=12.0.0
