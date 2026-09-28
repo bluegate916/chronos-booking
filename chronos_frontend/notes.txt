@@ -1,0 +1,19 @@
+npm install axios react-router-dom jwt-decode lucide-react
+
+To build your booking platform frontend and connect it 
+securely to your Django backend, you need packages to 
+handle API connections, page routing, and JWT authentication sessions.
+
+API Communicationaxios: The industry standard for handling HTTP requests. 
+You will use this to send GET requests to fetch rooms and POST requests to submit bookings. 
+It is much easier to configure with headers and base URLs than the native browser fetch function.2. 
+Page Routing & Navigationreact-router-dom: This handles navigation without reloading the entire page. 
+It allows you to define clean URL paths for your frontend, such as:/ — 
+Room Listing Gallery/room/:id — Specific Room Booking Screen/login — Login Screen/my-bookings — 
+Dashboard showing user schedules3. JWT Security & Auth Session Handlingjwt-decode: Your backend 
+uses djangorestframework-simplejwt. When a user logs in, the backend sends back an encrypted Access 
+Token string. jwt-decode allows React to read that token to check if it has expired and find out who 
+the logged-in user is (e.g., username or user ID) without needing another backend call.
+4. UI Elements & Icons (Bonus Support)lucide-react: A collection of icons. Instead of building 
+icons manually or importing heavy design frameworks, this gives you clean, modern icons out of 
+the box for items like clocks, calendars, bed/room indicators, and user avatars.
