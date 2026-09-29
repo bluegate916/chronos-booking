@@ -1,0 +1,91 @@
+/* Booking Summary Screen */
+.summary-card {
+  max-width: 672px;
+  margin: 0 auto;
+  border-radius: 24px;
+  border: 1px solid #f3f4f6;
+  background-color: #ffffff;
+  padding: 32px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.summary-header {
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 24px;
+  text-align: center;
+}
+.badge-step {
+  border-radius: 9999px;
+  background-color: #f0fdf4;
+  padding: 4px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #15803d;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.metrics-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  border-radius: 16px;
+  background-color: #f9fafb;
+  padding: 24px;
+  font-size: 0.875rem;
+}
+.metric-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+.metric-value {
+  display: block;
+  margin-top: 4px;
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 1rem;
+}
+.billing-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 8px;
+}
+.text-free {
+  color: #16a34a;
+}
+.action-buttons {
+  padding-top: 16px;
+  display: flex;
+  gap: 16px;
+}
+.btn-cancel {
+  flex: 1;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  padding: 14px 0;
+  font-weight: 700;
+  color: #6b7280;
+  background-color: transparent;
+  cursor: pointer;
+}
+.btn-cancel:hover {
+  background-color: #f9fafb;
+}
+.btn-confirm {
+  flex: 1;
+  border-radius: 12px;
+  background-color: #111827;
+  padding: 14px 0;
+  font-weight: 700;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s;
+}
+.btn-confirm:hover {
+  background-color: #2563eb;
+}

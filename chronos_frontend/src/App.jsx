@@ -1,10 +1,12 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, Navigation, Navigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import Login from "./pages/Login"
 import Register from './pages/Register'
 import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
+import RoomDetailScreen from './pages/RoomDetailScreen';
+import BookingSummaryScreen from './pages/BookingSummaryScreen';
 import './App.css'
 
 function Logout() {
@@ -23,13 +25,37 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          {/* Self contained component */}
+        <div className="app-container">
+        {/* Global Navigation Header */}
+        <nav className="navbar">
+          <div className="nav-container">
+            <Link to="/" className="brand-logo">
+              CHRONOS<span className="brand-subtext">BOOKING</span>
+            </Link>
+            <div className="nav-links">
+              <Link to="/" className="nav-link">Browse Rooms</Link>
+              <Link to="/summary" className="btn-my-bookings">My Bookings</Link>
+            </div>
+          </div>
+        </nav>
+
+        {/* Dynamic Route Pages */}
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/room/:id" element={<RoomDetailScreen />} />
+            <Route path="/summary" element={<BookingSummaryScreen />} />
+          </Routes>
+        </main>
+      </div>
+
+        {/* <Routes>
+          Self contained component 
           <Route 
             path='/'
             element={
             <ProtectedRoute>
-              {/* Home is for people authenticated and authorized */}
+            Home is for people authenticated and authorized
               <Home />
             </ProtectedRoute>
           }
@@ -38,7 +64,7 @@ function App() {
           <Route path='/register' element={<Register />}/>
           <Route path='/*' element={<NotFound />}></Route>
           <Route />
-        </Routes>
+        </Routes> */}
       </BrowserRouter>
     </>
   )

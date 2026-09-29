@@ -17,3 +17,9 @@ the logged-in user is (e.g., username or user ID) without needing another backen
 4. UI Elements & Icons (Bonus Support)lucide-react: A collection of icons. Instead of building 
 icons manually or importing heavy design frameworks, this gives you clean, modern icons out of 
 the box for items like clocks, calendars, bed/room indicators, and user avatars.
+
+git rm -r --cached .: This acts like an "un-stage" button. 
+It empties the Git indexing queue without touching or deleting 
+your actual local code files.git add .: Re-stages your workspace files.
+This time, Git reads your new .gitignore rules and completely skips past the millions of lines inside 
+node_modules.git status: Shows a tiny, clean tracking view containing only your actual hand-written source code files!

@@ -1,0 +1,136 @@
+/* Detail Screen Layout */
+.detail-grid {
+  display: grid;
+  gap: 40px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) {
+  .detail-grid {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.btn-back {
+  background: none;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #2563eb;
+  cursor: pointer;
+  text-align: left;
+}
+.btn-back:hover {
+  text-decoration: underline;
+}
+.detail-image {
+  height: 384px;
+  width: 100%;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+.section-divider {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+}
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+}
+.section-body {
+  margin-top: 12px;
+  line-height: 1.625;
+  color: #4b5563;
+}
+/* Reservation Card */
+.reservation-card {
+  height: fit-content;
+  border-radius: 24px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  padding: 24px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+}
+.card-subtitle {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+.form-group {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.input-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+}
+.number-input {
+  margin-top: 8px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  padding: 12px 16px;
+  font-weight: 600;
+}
+.number-input:focus {
+  border-color: #3b82f6;
+  background-color: #ffffff;
+  outline: none;
+}
+.cost-box {
+  border-radius: 16px;
+  background-color: #f9fafb;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.875rem;
+}
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  color: #4b5563;
+}
+.cost-total-row {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  color: #111827;
+  font-size: 1rem;
+}
+.total-accent {
+  color: #2563eb;
+}
+.btn-proceed {
+  width: 100%;
+  border-radius: 12px;
+  background-color: #2563eb;
+  padding: 16px 0;
+  font-weight: 700;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+  transition: background-color 0.2s;
+}
+.btn-proceed:hover {
+  background-color: #1d4ed8;
+}
