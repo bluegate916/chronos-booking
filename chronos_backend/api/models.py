@@ -32,5 +32,18 @@ class TimeSlot(models.Model):
     is_booked = models.BooleanField(default=False)
     booked_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
+    # The red underline is happening because Python f-strings cannot interpret raw percentage 
+    # characters (%) mixed with colons (:) inside nested single quotes without closing braces 
+    # properly, or your editor's checking engine thinks start_time could be evaluated as None '
+    # '(which doesn't have a strftime attribute).
+    # Additionally, looking at the string return statement, there is a missing opening curly brace 
+    # { right before self.start_time.strftime.
+    # To make this clean, completely standard, and safe for your editor, extract the string formatting 
+    # out of the f-string layout into local variables first.
+
     def __str__(self):
-        return f"{self.room.name} ({self.start_time.strftime('%H:%M')} - {self.end_time.strftime('%H:%M')})"
+        # Extract formatting to local variables first to clear text highlights
+        start = self.start_time.strftime('%H:%M') if self.start_time else "00:00"
+        end = self.end_time.strftime('%H:%M') if self.end_time else "00:00"
+        
+        return f"{self.room.name} ({start} - {end})"

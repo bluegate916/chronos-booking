@@ -23,3 +23,24 @@ It empties the Git indexing queue without touching or deleting
 your actual local code files.git add .: Re-stages your workspace files.
 This time, Git reads your new .gitignore rules and completely skips past the millions of lines inside 
 node_modules.git status: Shows a tiny, clean tracking view containing only your actual hand-written source code files!
+
+first regular user 
+firstName=midi, lastName=jose 
+username=midiosey
+midios3319@gmail.com
+password=midi339
+
+second regular user
+fn=milly
+ln=ivy
+un=millyvy
+milly19@gmail.com
+password=milly67
+
+john
+bull
+johnbull32
+johnbull32@gmail.com
+john321
+
+http://localhost:5173/register

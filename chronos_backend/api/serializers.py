@@ -2,15 +2,32 @@ from django.contrib.auth.models import User                  # Core Django User,
 from .models import Room, TimeSlot 
 from rest_framework import serializers
 
+# 1. Clean User profile view serializer
 class UserSerializer(serializers.ModelSerializer):
-    # The Meta class defines metadata for models
     class Meta:
         model = User
-        fields = ["id", "username", "password"]
-        extra_kwargs = {"password": {"write_only": True}}
+        fields = ["id", "username", "email"] # Never expose or handle passwords here
 
+# 2. Dedicated signup serialization engine 
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=6, style={'input_type': 'password'})
+
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'username', 'email', 'password']
+
+    # Aligned properly to override the default model save behavior
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
+        # We explicitly pop the password out to pass it through create_user for hashing
+        password = validated_data.pop('password')
+        
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', ''),
+            password=password # This hashes the password cleanly into PostgreSQL
+        )
         return user
 
 # Serializer for Rooms, Bookings

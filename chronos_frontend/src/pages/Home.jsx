@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CompanyInfo from '../components/CompanyInfo';
 import './Home.css';
 
 const MOCK_ROOMS = [
@@ -222,6 +223,9 @@ export default function HomeScreen() {
           </div>
         ))}
       </div>
+
+      {/* Footer */}
+      <CompanyInfo />
     </div>
   );
 }

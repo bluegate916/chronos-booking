@@ -1,25 +1,44 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from .serializers import UserSerializer, RoomSerializer, TimeSlotSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Room, TimeSlot
 from django.db import IntegrityError
 
+from .serializers import (
+    UserSerializer, 
+    RoomSerializer, 
+    TimeSlotSerializer, 
+    UserRegistrationSerializer
+)
+
 #BookingSerializer Booking are all TimeSlotSerializer
 # Create your views here.
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    # Anyone can call this
-    permission_classes = [AllowAny]
+class UserRegisterAPIView(APIView):
+    """
+    Features:
+    - POST: Public endpoint allowing anyone to create an account.
+    """
+    permission_classes = [AllowAny] # Publicly accessible
 
+    def post(self, request):
+        serializer = UserRegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                serializer.save()
+                return Response({"message": "User registered successfully!"}, status=status.HTTP_201_CREATED)
+            except IntegrityError:
+                return Response({"error": "A database integrity conflict occurred."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Extract precise validation errors (like 'username already exists')
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
 #  this automatically handles database exceptions 
 # (like your ExclusionConstraint double-booking error) 
 # and returns clean error codes to React.
-
 class TimeSlotCreateAPIView(APIView):
     """Handles fetching all bookings and creating a new booking."""
     def get(self, request):
