@@ -1,6 +1,8 @@
 import  { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import api from '../api';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../constants';
 
 const styles = {
   card: {
@@ -106,32 +108,49 @@ function Login() {
         username: username, 
         password: password 
       });
+
+      const access = response.data.access;
       
       // Save your security token badges to the browser storage context
-      localStorage.setItem('access_token', response.data.access);
-      localStorage.setItem('refresh_token', response.data.refresh);
+      // localStorage.setItem('access_token', response.data.access);
+      // localStorage.setItem('refresh_token', response.data.refresh);
+
+      // Change them to use your imported constants exactly:
+      // Because 'access_token' (lowercase string) does not match 
+      // the actual variable value stored inside your ACCESS_TOKEN 
+      // constant (which usually evaluates to "access" or something 
+      // different), your Axios interceptor could not find the token. 
+      // It sent an empty header to Django, resulting in the 401 
+      // Unauthorized rejection log.
+
+      localStorage.setItem(ACCESS_TOKEN, response.data.access);
+      localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+
+      // Decrypt the token payload parameters
+      const decodedUser = jwtDecode(access);
+
+      // Conditional Routing Logic
+      
+      if (decodedUser.is_superuser === true || decodedUser.is_staff === true) {
+        alert('Welcome Admin! Routing to Management Dashboard.');
+        navigate('/admin-dashboard'); 
+      } else if (decodedUser.username === 'admin' || decodedUser.is_superuser) {
+        // Fallback catch boundary explicitly capturing the default master superuser account name
+        alert('Welcome System Superuser! Routing to Admin Hub.');
+        navigate('/admin-dashboard');
+      } else {
+        alert('Login Successful! Routing User to Dashboard.');
+        navigate('/dashboard'); 
+      }
       
       setLoading(false);
-      navigate('/'); // Route back to the home workspace listings feed
-    } catch (err) {
+    } catch (error) {
+      console.error("Authication Failed", error)
       setLoading(false);
       // Fallback message if credentials don't match database records
       setError('Invalid username or password credentials. Please try again.');
-
-//       Make React show you the Exact Error
-// To stop guessing why it is failing, let's force React to print the real error directly onto your 
-// screen instead of hiding it behind the generic "Username might be taken" message.
-// Open src/pages/Register.jsx, look inside your catch (err) block, and change it to look exactly like this:
-// javascript
-// } catch (err) {
-//   // This extracts the specific message sent by Django (e.g. "Password too short" or "Database connection refused")
-//   const serverError = err.response?.data 
-//     ? JSON.stringify(err.response.data) 
-//     : err.message;
-    
-  setError(`Registration failed: ${serverError}`);
-}
     }
+  }
 
 return (
     <div style={styles.card}>
@@ -188,8 +207,6 @@ return (
       </p>
     </div>
   );
-  };
+};
 
-
-
-export default Login
+export default Login;

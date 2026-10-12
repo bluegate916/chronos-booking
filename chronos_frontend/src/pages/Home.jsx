@@ -1,6 +1,7 @@
-import  { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import  { useState,useEffect } from 'react';
+import { Navigate, Link, useNavigate } from 'react-router-dom';
 import CompanyInfo from '../components/CompanyInfo';
+import api from '../api';
 import './Home.css';
 
 const MOCK_ROOMS = [
@@ -169,16 +170,74 @@ const MOCK_ROOMS = [
 ];
 
 export default function HomeScreen() {
+  const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const navigate = useNavigate();
+
+  // New Room Form State (For Admins)
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '', 
+    room_type: 'SINGLE', 
+    room_number: '', 
+    location: '', 
+    description: '', 
+    price_per_hour: ''
+  });
+
+  const fetchRooms = async () => {
+    try {
+      const response = await api.get('/api/rooms/');
+      setRooms(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching data from database:", err);
+      setLoading(false);
+    }
+  };
+
+  // Fetch rooms on component mount 
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  // Submit Handler for Admin Creating a Room
+  const handleCreateRoom = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post('/api/rooms/', formData);
+      setShowAddForm(false);
+      setFormData({ name: '', room_type: 'SINGLE', room_number: '', location: '', description: '', price_per_hour: '' });
+      fetchRooms(); // Refresh the feed dynamically
+    } catch (err) {
+      console.error("Error fetching data from database:", err);
+      alert("Failed to create room. Ensure you are logged in as an Admin superuser account.");
+    }
+  };
 
   const filteredRooms = selectedCategory === 'ALL' 
     ? MOCK_ROOMS 
     : MOCK_ROOMS.filter(room => room.type === selectedCategory);
 
+  if (loading) return <div style={styles.loadingText}>Connecting to PostgreSQL matrix...</div>;
+
   return (
     <div>
       <div className="header-section">
+        {/* Global Navigation Header */}
+          <nav className="navbar">
+            <div className="navContainer">
+                    <Link to="/" className="brandLogo">
+                      CHRONOS<span className="brand-subtext">BOOKING</span>
+                    </Link>
+                    <div className="navLinks">
+                      <Link to="/register" className="navLink">Sign Up</Link>
+                      <Link to="/login" className="navLink">Log In</Link>
+                      <Link to="/summary" className="btnMyBookings">My Bookings</Link>
+                    </div>
+                  </div>
+                </nav>
         <h1 className="main-title">Find Your Perfect Workspace</h1>
         <p className="subtitle">Flexible hourly room rentals tailored to your scheduling requirements.</p>
       </div>
@@ -229,3 +288,278 @@ export default function HomeScreen() {
     </div>
   );
 }
+
+// Pure Vanilla CSS Objects Dictionary
+const styles = {
+  container: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '2rem 1rem',
+    fontFamily: 'system-ui, -apple-system, sans-serif',
+    boxSizing: 'border-box'
+  },
+  navContainer: {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    boxSizing: 'border-box'
+  },
+  brandLogo: {
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    letterSpacing: '-0.025em',
+    color: '#2563eb',
+    textDecoration: 'none'
+  },
+  brandSubtext: {
+    color: '#6b7280'
+  },
+  navLinks: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '24px'
+  },
+  navLink: {
+    fontSize: '0.875rem',
+    fontWeight: '500',
+    color: '#111827',
+    textDecoration: 'none',
+    transition: 'color 0.2s ease'
+  },
+  // Note: Hover states are applied interactively via inline handlers or base styles
+  navLinkHover: {
+    color: '#2563eb'
+  },
+  btnMyBookings: {
+    borderRadius: '8px',
+    backgroundColor: '#2563eb',
+    padding: '8px 16px',
+    fontSize: '0.875rem',
+    fontWeight: '600',
+    color: '#ffffff',
+    textDecoration: 'none',
+    boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease'
+  },
+  btnMyBookingsHover: {
+    backgroundColor: '#1d4ed8'
+  },
+  loadingText: {
+    textAlign: 'center',
+    padding: '3rem 0',
+    fontWeight: '600',
+    color: '#6b7280',
+    fontSize: '1.125rem'
+  },
+  headerRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '1rem',
+    marginBottom: '2rem'
+  },
+  mainTitle: {
+    fontSize: '1.875rem',
+    fontWeight: '800',
+    color: '#111827',
+    margin: '0 0 0.5rem 0'
+  },
+  subtitle: {
+    color: '#4b5563',
+    margin: 0,
+    fontSize: '1rem'
+  },
+  adminToggleBtn: {
+    backgroundColor: '#2563eb',
+    color: '#ffffff',
+    border: 'none',
+    borderRadius: '0.75rem',
+    padding: '0.75rem 1.25rem',
+    fontSize: '0.875rem',
+    fontWeight: '700',
+    cursor: 'pointer',
+    boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)'
+  },
+  adminForm: {
+    backgroundColor: '#eff6ff',
+    border: '1px solid #dbeafe',
+    borderRadius: '1rem',
+    padding: '1.5rem',
+    marginBottom: '2.5rem',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: '1rem',
+    boxSizing: 'border-box'
+  },
+  formTitle: {
+    gridColumn: '1 / -1',
+    margin: 0,
+    fontSize: '1.125rem',
+    fontWeight: '700',
+    color: '#1e3a8a'
+  },
+  formInput: {
+    padding: '0.75rem',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '0.75rem',
+    fontSize: '0.875rem',
+    outline: 'none',
+    boxSizing: 'border-box',
+    width: '100%'
+  },
+  formTextarea: {
+    padding: '0.75rem',
+    backgroundColor: '#ffffff',
+    border: '1px solid #e5e7eb',
+    borderRadius: '0.75rem',
+    fontSize: '0.875rem',
+    outline: 'none',
+    boxSizing: 'border-box',
+    height: '45px',
+    resize: 'none',
+    width: '100%'
+  },
+  formSubmitBtn: {
+    gridColumn: '1 / -1',
+    backgroundColor: '#111827',
+    color: '#ffffff',
+    fontWeight: '700',
+    padding: '0.75rem',
+    border: 'none',
+    borderRadius: '0.75rem',
+    cursor: 'pointer',
+    fontSize: '0.875rem'
+  },
+  filterRow: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '0.75rem',
+    marginBottom: '2rem'
+  },
+  filterBtn: {
+    borderRadius: '9999px',
+    padding: '0.5rem 1.25rem',
+    fontSize: '0.75rem',
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
+    border: 'none',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease'
+  },
+  filterBtnActive: {
+    backgroundColor: '#2563eb',
+    color: '#ffffff',
+    boxShadow: '0 4px 6px -1px rgba(37, 99, 235, 0.2)'
+  },
+  filterBtnInactive: {
+    backgroundColor: '#ffffff',
+    color: '#4b5563',
+    border: '1px solid #e5e7eb'
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#6b7280',
+    padding: '3rem 0',
+    margin: 0
+  },
+  roomsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+    gap: '2rem'
+  },
+  roomCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: '1rem',
+    border: '1px solid #f3f4f6',
+    overflow: 'hidden',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+    display: 'flex',
+    flexDirection: 'column',
+    boxSizing: 'border-box'
+  },
+  imageWrapper: {
+    height: '12rem',
+    width: '100%',
+    backgroundColor: '#f3f4f6',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontWeight: '500'
+  },
+  roomImage: {
+    height: '100%',
+    width: '100%',
+    objectFit: 'cover'
+  },
+  cardContent: {
+    padding: '1.5rem',
+    display: 'flex',
+    flexDirection: 'column',
+    flexGrow: 1
+  },
+  roomBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#eff6ff',
+    color: '#1d4ed8',
+    padding: '0.25rem 0.625rem',
+    borderRadius: '0.375rem',
+    fontSize: '0.75rem',
+    fontWeight: '600'
+},
+roomName: {
+fontSize: '1.25rem',
+fontWeight: '700',
+color: '#111827',
+margin: '0.75rem 0 0.25rem 0'
+},
+roomMeta: {
+fontSize: '0.875rem',
+color: '#6b7280',
+margin: '0 0 0.75rem 0'
+},
+roomDesc: {
+fontSize: '0.875rem',
+color: '#4b5563',
+margin: '0 0 1.5rem 0',
+lineHeight: '1.4',
+display: '-webkit-box',
+WebkitLineClamp: 2,
+WebkitBoxOrient: 'vertical',
+overflow: 'hidden'
+},
+cardFooter: {
+marginTop: 'auto',
+borderTop: '1px solid #f9fafb',
+paddingTop: '1rem',
+display: 'flex',
+justifyContent: 'space-between',
+alignItems: 'center'
+},
+priceNumber: {
+fontSize: '1.25rem',
+fontWeight: '900',
+color: '#2563eb'
+},
+priceLabel: {
+fontSize: '0.75rem',
+color: '#6b7280'
+},
+bookBtn: {
+backgroundColor: '#111827',
+color: '#ffffff',
+border: 'none',
+borderRadius: '0.75rem',
+padding: '0.625rem 1rem',
+fontSize: '0.875rem',
+fontWeight: '600',
+cursor: 'pointer',
+transition: 'background-color 0.2s'
+}
+};
