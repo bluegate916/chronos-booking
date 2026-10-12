@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import Login from "./pages/Login"
 import Register from './pages/Register';
 import Home from './pages/Home'
-import NotFound from './pages/NotFound'
+// import NotFound from './pages/NotFound'
 import ProtectedRoute from './components/ProtectedRoute'
 import RoomDetailScreen from './pages/RoomDetailScreen';
 import BookingSummaryScreen from './pages/BookingSummaryScreen';
+import Dashboard from './pages/Dashboard';
+import AdminDashboard from './pages/AdminDashboard';
+import Logout from './pages/Logout';
 import './App.css'
 
 // function Logout() {
@@ -26,20 +29,6 @@ function App() {
     <>
       <BrowserRouter>
         <div className="app-container">
-        {/* Global Navigation Header */}
-        <nav className="navbar">
-          <div className="nav-container">
-            <Link to="/" className="brand-logo">
-              CHRONOS<span className="brand-subtext">BOOKING</span>
-            </Link>
-            <div className="nav-links">
-              <Link to="/register" className="nav-link">Sign Up</Link>
-              <Link to="/login" className="nav-link">Log In</Link>
-              <Link to="/summary" className="btn-my-bookings">My Bookings</Link>
-            </div>
-          </div>
-        </nav>
-
         {/* Dynamic Route Pages */}
         <main className="main-content">
           <Routes>
@@ -47,27 +36,27 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/room/:id" element={<RoomDetailScreen />} />
+            <Route path="/logout" element={<Logout />} />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin-dashboard" 
+              element={
+                <ProtectedRoute>
+                  <AdminDashboard />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/summary" element={<BookingSummaryScreen />} />
           </Routes>
         </main>
       </div>
-
-        {/* <Routes>
-          Self contained component 
-          <Route 
-            path='/'
-            element={
-            <ProtectedRoute>
-            Home is for people authenticated and authorized
-              <Home />
-            </ProtectedRoute>
-          }
-          />
-          <Route path='/login' element={<Login />}/>
-          <Route path='/register' element={<Register />}/>
-          <Route path='/*' element={<NotFound />}></Route>
-          <Route />
-        </Routes> */}
       </BrowserRouter>
     </>
   )
