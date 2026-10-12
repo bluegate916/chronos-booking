@@ -4,17 +4,37 @@ from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Room, TimeSlot
 from django.db import IntegrityError
 
 from .serializers import (
-    UserSerializer, 
-    RoomSerializer, 
+    # UserSerializer, 
+    # RoomSerializer, 
     TimeSlotSerializer, 
-    UserRegistrationSerializer
+    UserRegistrationSerializer,
+    CustomTokenObtainPairSerializer
 )
 
-#BookingSerializer Booking are all TimeSlotSerializer
+#Get users profile details
+class UserProfileAPIView(APIView):
+    """
+    Features:
+    - GET: Automatically retrieves account profile parameters for the currently logged-in token owner.
+    """
+    permission_classes = [IsAuthenticated] # Protected path
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name
+        }, status=status.HTTP_200_OK)
+
+
 # Create your views here.
 class UserRegisterAPIView(APIView):
     """
@@ -72,3 +92,10 @@ class TimeSlotCreateAPIView(APIView):
         
         # 5. Return field validation errors if the data format was wrong
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    Custom view that uses our custom serializer to hand back tokens 
+    containing role privileges.
+    """
+    serializer_class = CustomTokenObtainPairSerializer

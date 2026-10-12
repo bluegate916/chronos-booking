@@ -26,14 +26,10 @@ export default function Register() {
       });
       alert('Registration successful! Redirecting to login screen.');
       navigate('/login');
-    } catch (err) {
-      // Improved error tracking: reads direct validation errors from Django if present
-      const detailedError = err.response?.data 
-        ? JSON.stringify(err.response.data) 
-        : 'Registration failed. Username might be taken.';
-      setError(detailedError);
+    } catch (error) {
+      console.error('Registration failed. Username might be taken.', error);
     }
-  };
+  }; 
 
   return (
     <div style={styles.card}>

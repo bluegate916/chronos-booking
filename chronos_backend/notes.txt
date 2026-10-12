@@ -5,6 +5,22 @@ install using requirements ---  pip install -r requirements.txt
 INFO: pip is looking at multiple versions of django to determine which version is compatible with other requirements. This could take a while.
 ERROR: Cannot install -r requirements.txt (line 2) and asgiref==3.8.1 because these package versions have conflicting dependencies.
 
+How to Retrieve Username via the Terminal
+python manage.py shell
+from django.contrib.auth.models import User
+# This finds and prints all superusers in your local database
+print(list(User.objects.filter(is_superuser=True).values_list('username', flat=True)))
+
+admin username = usert
+password = chronos247
+
+Clear the Superuser 401 Unauthorized Login Bug
+
+Because you are using the brand new Python 3.14, Django's default encryption algorithm (PBKDF2) can sometimes 
+conflict with older cached database records during local environment shifts.
+The easiest and safest way to fix the 401 login error is to use the terminal to forcefully 
+reset your superuser password, which re-encrypts it perfectly using Python 3.14:
+
 The conflict is caused by:
     The user requested asgiref==3.8.1
     django 6.1.1 depends on asgiref>=3.9.1
